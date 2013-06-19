@@ -1,0 +1,97 @@
+DOCUMENTATION
+
+  So there are really only two functions that you should use that call a couple others in order to make your video: create_solo and create_multi. create_solo.
+	create_solo: create a movie from 1 persons latitude and longitude coordinates
+	create_multi: create a movie from 2 or more peoples latitude and longitude coordinates
+
+		create_solo(folder,name,latitudes,longitudes,times=None,color='red',label=' ',zoom=12,center=None,start=None,end=None,by=None,size='600x300',_type='mov',loop=0,fps=5,titlebar=True)
+
+folder: name of the folder you want the video to go into (ie. '/Users/me/Desktop/movies/')
+
+name: name of the movie without the end .mov (ie. 'my_day_map')
+
+**note that the following 3 must all be matched together where latitudes[i],longitudes[i],and times[i] is a correct pair**
+latitudes: This can either be a Pandas series of latitudes or just a list of latitudes
+longitudes: This can either be a Pandas series of longitudes or just a list of longitudes
+times: This can either be a Pandas series of times or just a list of dates, string or datetime objects
+
+color: The color of the tick mark, lowercase colors (ie. 'blue' or 'red')
+
+label: Any one character 
+
+zoom: an integer that is how close you want to be zoomed in on the map. Suggested to be a number between 6 and 14
+
+center: can either be longitude and latitude coordinates in the form of 'latitude,longitude', or can be a place in the form of 'Brooklyn Bridge,New York,NY' No space between commas and words, but spaces between the names of the places and cities if there are.
+
+start,end: These can either be integers or strings/datetime objects (dates). Here are the examples:
+	if both are dates then the data inputted will only be taken from the starting to the ending, but not including the ending...example...start='2012-02-01',end='2012-02-02' will take all the data from the 1st of February in 2012
+	if both are integers then it will take the normal index of the arrays at those integers
+	if start is a date and end is an integer (x), then it will start at the start date, and end x dates after
+	if end is a date and start is an integer (x), then it will start x before end and end right before end
+
+by: This can be two things: an integer, or a string:
+	int: if it is an integer it should be the increment, for example, by=2 will only take every other row
+	str: This is used if times is a list of dates/datetimes. 'Y' = years, 'M' = months, 'D' = days, 'h' = hours, 'm' = minutes, and 's' = seconds. So by='m15' will only use 1 row every 15 minutes. by='D2' is every other day, etc.
+
+size: a string in the form 'widthxheight'
+
+_type: option of either 'mov' or 'gif' 
+
+loop: Only if _type='gif', sets the number of loops for the gif. Default is 0=infinite
+
+fps: An integer that sets the number of frames per second
+
+titlebar: A boolean, default to True, that, if True, will place a gray bar above your movie with a changing title. If you gave time inputs, the title will be the time for the frame, if times=None, then it will just be the number of the frame
+
+		create_multi(folder,name,latitudes,longitudes,colors=None,labels=None,zoom=12,center=None,start=None,end=None,by=None,size='600x300',_type='mov',loop=0,fps=5,titlebar=True)
+
+folder: name of the folder you want the video to go into (ie. '/Users/me/Desktop/movies/')
+
+name: name of the movie without the end .mov (ie. 'my_day_map')
+
+**note that the following 2 must all be matched together where latitudes[i],longitudes[i] is a correct pair**
+latitudes: This can either be a list of Pandas series of latitudes or just a list of a list of latitudes
+longitudes: This can either be a list of Pandas series of longitudes or just a list a list of of longitudes
+
+colors: a list of colors of the tick mark for the map, where colors[i] will be the color of the tick mark for the point from latitude[i] and longitude[i], lowercase colors (ie. 'blue' or 'red'). If not enough colors are specified, the color will be set to a dark gray
+
+labels: a list of Any one character where labels[i] will be the lable for the tick mark for the point from latitude[i] and longitude[i]. If not enough are specified, a question mark will be placed on the ones without a label.
+
+zoom: an integer that is how close you want to be zoomed in on the map. Suggested to be a number between 6 and 14
+
+center: can either be longitude and latitude coordinates in the form of 'latitude,longitude', or can be a place in the form of 'Brooklyn Bridge,New York,NY' No space between commas and words, but spaces between the names of the places and cities if there are.
+
+start,end,by: these 3 are integers for the index of the lists. each individual list for the latitudes and longitudes will change there index with list_name[start:end:by]
+
+size: a string in the form 'widthxheight'
+
+_type: option of either 'mov' or 'gif' 
+
+loop: Only if _type='gif', sets the number of loops for the gif. Default is 0=infinite
+
+fps: An integer that sets the number of frames per second
+
+titlebar: A boolean, default to True, that, if True, will place a gray bar above your movie with a changing title of the number of the current frame 
+
+	Likewise, there are two functions for generating images: 
+	get_single map: Generate a map with one person on it
+	get_multiple map: Generate a map with 2 or more people on it
+	note: all of the inputs are similar to the previous function and easy to understand, so I will not write a detailed explanation and be redundant, but show you the functions parameters so you understand:
+
+		get_single_map(folder,name,latitude,longitude,label=' ',color='red',zoom=12,center=None,size='600x300')
+
+		get_multiple_map(folder,name,latitudes,longitudes,labels=None,colors=None,zoom=12,center=None,size='600x300'):
+
+	now there are 3 more functions that are used in order to make this all possible, that you might find useful in your other programs and are welcome to implement: movie_maker, common_finder, and time_sample.
+
+For movie_maker it takes inputs of urls and grabs images from the urls and converts them into a movie file:
+
+	movie_maker(urls,folder,name,_type='mov',loop=0,fps=5,titlebar=True,titles=None)
+
+common_finder takes any amount of list, zips them together, and will return the most common group where each list[i] is paired to the next list[i] and so on. Note: it does return this in the form of 'list1[i],list2[i],...,listn[i]'
+
+	common_finder(*args)
+
+time_sample is by far the most useful, and very similar to what pandas.DataFrame.resample does. It takes a list of datetime objects or strings and any other lists that go with the dates, and with the same syntax that the by parameter in the movie making functions uses, it will return a list of the lists after they have been incremented by the given amount.
+
+	time_sample(sample,times,*args)
