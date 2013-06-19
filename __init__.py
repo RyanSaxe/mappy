@@ -158,19 +158,19 @@ def get_single_map(folder,name,latitude,longitude,label=' ',color='red',zoom=12,
 	from urllib import urlretrieve
 	if folder[-1] != '/':
 		folder = folder + '/'
-	print folder
+	#print folder
 	point = str(latitude) + "," + str(longitude)
-	print point
+	#print point
 	file_name = folder + name + '.jpg'
 	if center == None:
 		center = ''
 	else:
 		center = '&center=' + '+'.join(center.split())
-	print center
+	#print center
 	zoom = '&zoom=' + str(zoom)
 	marker = '&markers=color:' + color + '%7Clabel:' + label + '%7C' + point
 	url = 'http://maps.googleapis.com/maps/api/staticmap?maptype=roadmap&size=' + size + zoom + center + marker + '&sensor=true'
-	print url
+	#print url
 	urlretrieve(url,file_name)
 def get_multiple_map(folder,name,latitudes,longitudes,labels=None,colors=None,zoom=12,center=None,size='600x300'):
 	from urllib import urlretrieve
