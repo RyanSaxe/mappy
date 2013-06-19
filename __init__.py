@@ -1,5 +1,5 @@
 def time_sample(sample,times,*args):
-  if type(times[0]) == str:
+	if type(times[0]) == str:
 		from dateutil import parser
 		times = [parser.parse(x) for x in times]
 	if len(sample) == 1:
