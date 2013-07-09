@@ -30,7 +30,6 @@ def time_sample(sample,times,*args):
 				else:
 					if dt.days >= amount:
 						good = True
-					#multiplyer = timedelta(days=amount).total_seconds()
 				if good:
 					sampled[0].append(time)
 					mini_count = 1
@@ -64,7 +63,6 @@ def time_sample(sample,times,*args):
 def common_finder(*args):
 	import collections
 	z = zip(*args)
-	#print z
 	places = [','.join(x) for x in z]
 	answer = collections.Counter(places).most_common(1)
 	return answer[0][0]
@@ -85,7 +83,6 @@ def url_maker(latitudes,longitudes,times=None,color='red',label=' ',zoom=12,cent
 	import datetime
 	latitudes,longitudes,times = list(latitudes),list(longitudes),list(times)
 	if isinstance(times[0],str) or isinstance(times[0],datetime.datetime):
-		#print 1
 		from dateutil import parser
 		if isinstance(times[0],str):
 			times = [parser.parse(x) for x in times]
@@ -97,7 +94,6 @@ def url_maker(latitudes,longitudes,times=None,color='red',label=' ',zoom=12,cent
 			endindex = parser.parse(end)
 		else:
 			endindex = end
-		#print endindex,startindex
 		if isinstance(startindex,datetime.datetime):
 			startpos = between_times(times,startindex,by='start')
 		elif isinstance(startindex,int):
@@ -117,7 +113,6 @@ def url_maker(latitudes,longitudes,times=None,color='red',label=' ',zoom=12,cent
 		else:
 			endpos = end
 	else:
-		#print 2
 		startpos = start
 		endpos = end
 		times = range(1,len(latitudes) + 1)
@@ -131,14 +126,11 @@ def url_maker(latitudes,longitudes,times=None,color='red',label=' ',zoom=12,cent
 			endpos = None
 	if isinstance(by,str):
 		lat,lon,t = latitudes[startpos:endpos],latitudes[startpos:endpos],times[startpos:endpos]
-		#print lat
 		t,lats,lons = time_sample(by,t,lat,lon)
 	elif isinstance(by,int):
 		lats,lons,t = latitudes[startpos:endpos:by],latitudes[startpos:endpos:by],times[startpos:endpos:by]
 	else:
 		lats,lons,t= latitudes[startpos:endpos],latitudes[startpos:endpos],times[startpos:endpos]
-	#print t
-	#print len(t)
 	if center == None:
 		latit = [str(i) for i in lats]
 		longi = [str(i) for i in lons]
@@ -147,30 +139,24 @@ def url_maker(latitudes,longitudes,times=None,color='red',label=' ',zoom=12,cent
 		center = '&center=' + '+'.join(center.split())
 	zoom = '&zoom=' + str(zoom)
 	for i in range(len(lats)):
-		#label = str(i)
 		x,y = str(lats[i]),str(lons[i])
 		marker = '&markers=color:' + color + '%7Clabel:' + label + '%7C' + x + ',' + y
 		url = 'http://maps.googleapis.com/maps/api/staticmap?maptype=roadmap&size=' + size + zoom + center + marker + '&sensor=true'
 		urls.append(url)
-		#print i
 	return urls,t
 def get_single_map(folder,name,latitude,longitude,label=' ',color='red',zoom=12,center=None,size='600x300'):
 	from urllib import urlretrieve
 	if folder[-1] != '/':
 		folder = folder + '/'
-	#print folder
 	point = str(latitude) + "," + str(longitude)
-	#print point
 	file_name = folder + name + '.jpg'
 	if center == None:
 		center = ''
 	else:
 		center = '&center=' + '+'.join(center.split())
-	#print center
 	zoom = '&zoom=' + str(zoom)
 	marker = '&markers=color:' + color + '%7Clabel:' + label + '%7C' + point
 	url = 'http://maps.googleapis.com/maps/api/staticmap?maptype=roadmap&size=' + size + zoom + center + marker + '&sensor=true'
-	#print url
 	urlretrieve(url,file_name)
 def get_multiple_map(folder,name,latitudes,longitudes,labels=None,colors=None,zoom=12,center=None,size='600x300'):
 	from urllib import urlretrieve
@@ -208,10 +194,6 @@ def get_multiple_map(folder,name,latitudes,longitudes,labels=None,colors=None,zo
 	url = 'http://maps.googleapis.com/maps/api/staticmap?maptype=roadmap&size=' + size + zoom + center + ''.join(markers) + '&sensor=true'
 	urlretrieve(url,file_name)
 def multi_mov(latitudes,longitudes,labels=None,colors=None,zoom=12,center=None,start=None,end=None,by=1,size='600x300'):
-#	if 'pandas' in str(type(latitudes)):
-#		latitudes = [list(i) for i in latitudes]
-#	if 'pandas' in str(type(longitudes)):
-#		longitudes = [list(i) for i in longitudes]
 	cutlat = min([len(i) for i in latitudes])
 	cutlon = min([len(i) for i in longitudes])
 	latitudes = [s[:cutlat] for s in latitudes]
@@ -222,12 +204,8 @@ def multi_mov(latitudes,longitudes,labels=None,colors=None,zoom=12,center=None,s
 	for point in points:
 		x = [str(point[0][i]) + ',' + str(point[1][i]) for i in range(len(point[0]))]
 		hold.append(x)
-	#print len(hold)
 	locs = zip(*hold)
-	#print locs
-	#print organize
 	organize = locs[start:end:by]
-	#print organize
 	final_size = len(hold)
 	if labels == None:
 		label = [' '] * final_size
@@ -257,7 +235,6 @@ def multi_mov(latitudes,longitudes,labels=None,colors=None,zoom=12,center=None,s
 			count += 1
 		url = 'http://maps.googleapis.com/maps/api/staticmap?maptype=roadmap&size=' + size + zoom + center + ''.join(markers) + '&sensor=true'
 		urls.append(url)
-	#print titles
 	return urls
 def movie_maker(urls,folder,name,_type='mov',loop=0,fps=5,titlebar=True,titles=None):
 	from subprocess import call
@@ -278,9 +255,7 @@ def movie_maker(urls,folder,name,_type='mov',loop=0,fps=5,titlebar=True,titles=N
 		count += 1
 		s1 = len(str(count))
 		s2 = size2 - s1
-		#print src
 		file_name = folder + filler[0:s2] + str(count) + '.png'
-		#print file_name
 		urlretrieve(src, file_name)
 		if titlebar == True:
 			call('convert %s -gravity North -background Gray -splice 0X18 -annotate +0+2 "%s" %s' % (file_name,title,file_name), shell=True)
@@ -306,7 +281,6 @@ def movie_maker(urls,folder,name,_type='mov',loop=0,fps=5,titlebar=True,titles=N
 		raise TypeError(
                 "The only options for movie type are MOV and GIF."
             )
-	#for mov
 	if "darwin" in _platform:
 		call('rm ' + folder + '*.png', shell=True)
 	elif "linux" in _platform:
@@ -325,3 +299,4 @@ def create_multi(folder,name,latitudes,longitudes,colors=None,labels=None,zoom=1
 	images = multi_mov(latitudes,longitudes,colors=colors,labels=labels,zoom=zoom,center=center,start=start,end=end,by=by,size=size)
 	movie_maker(images,folder,name,_type=_type,loop=loop,fps=fps,titlebar=titlebar)
 	print "Your movie has been created at " + folder + name + '.' + _type.lower()
+
