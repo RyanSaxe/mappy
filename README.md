@@ -48,6 +48,6 @@ now it's time to create our movie. First lets assign some variables:
 
 now that we have set it so we don't end up grabbing 50,000 GPS coordinates, we can generate a map using the create_solo function:
 
-	create_solo(destination,name,latitudes,longitudes,times=times,start=first_day,end=last_day,by=sample_by)
+	mp.create_solo(destination,name,latitudes,longitudes,times=times,start=first_day,end=last_day,by=sample_by)
 	
 there are many other keyword parameters that you can use to customize things like frames per second, the type of video, the size of the video, the label of the tick mark, and so on. In order to view the full documentation, click the documentation link in the repository.
