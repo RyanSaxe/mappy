@@ -32,11 +32,12 @@ So lets say our csv contains all the GPS coordinates and relevant time for a sin
 
 	import csv
 	reader = csv.reader(open('file_name.csv','rb'))
-	l = reader.readlines()
-	new_l = zip(l)
-	latitudes = new_l[0]
-	longitudes = new_l[1]
-	times = new_l[2]
+	header = reader.next()
+	l = [row for row in reader]
+	new_l = zip(*l)
+	latitudes = list(new_l[0])
+	longitudes = list(new_l[1])
+	times = list(new_l[2])
 
 now it's time to create our movie. First lets assign some variables:
 
